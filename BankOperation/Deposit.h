@@ -16,11 +16,11 @@ public:
 	virtual void setSum(CurrencyType value) = 0;
 	std::tm getDate() const { return m_dateStart; };
 	std::tm getLastOpDate() const { return m_dateLastOp; };
-	void setLastOpDate(std::tm date) { m_dateLastOp = date; };
+	bool setLastOpDate(std::tm date);
 	virtual void print() = 0;
 	virtual CurrencyType calculateProfit(std::tm date) const;
 	double getPercent() const { return m_percent; };
-	void updateSum(double value);
+	virtual void updateSum(double value, std::tm date);
 
 protected:
 	CurrencyType m_sum; //Сумма вклада
@@ -49,7 +49,8 @@ public:
 	TermDeposit(unsigned long id = 0, CurrencyType sum = CurrencyType(), std::tm date = std::tm(), double percent = 0, 
 		std::tm expdate = std::tm());
 	virtual CurrencyType getSum() const { return m_sum; };
-	virtual void setSum(CurrencyType value) { m_sum = value; };
+	virtual void setSum(CurrencyType value) {};
+	virtual void updateSum(double value, std::tm date) {};
 	std::tm getExpirationDate() const { return m_dateExpiration; };
 	void print();
 	virtual CurrencyType calculateProfit(std::tm date);

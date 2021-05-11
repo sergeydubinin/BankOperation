@@ -1,20 +1,26 @@
 #pragma once
 
 #include "Deposit.h"
+#include <set>
 
 class Table
 {
 public:
-	const static std::size_t Size = 100;
-	Table();
-	std::size_t getCount() const { return m_count; };
-	const Deposit* get(std::size_t i) const { return m_data[i]; };
+	Table() {};
+	std::size_t getCount() const { return m_data.size(); };
 	bool Add(Deposit* ptr);
 	Deposit* getByID(unsigned long id);
 	void removeByID(unsigned long id);
 	void print() const;
-	~Table();
+	~Table() {};
 private:
-	Deposit* m_data[Size];
-	std::size_t m_count;
+	struct DepositCMP
+	{
+		bool operator()(const Deposit* a, const Deposit* b) const
+		{
+			return a->getID() < b->getID();
+		}
+	};
+
+	std::set<Deposit*, DepositCMP> m_data;
 };
