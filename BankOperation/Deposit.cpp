@@ -2,7 +2,7 @@
 #include <iostream>
 
 Deposit::Deposit(unsigned long id, CurrencyType sum, std::tm date, double percent) : 
-	m_sum(sum), m_dateStart(date), m_dateLastOp(date), m_percent(percent), m_id(id) {}
+	m_sum(sum), m_dateStart(date), m_dateLastOp(date), m_percent(percent), m_id(id), m_cached(0) {}
 
 bool Deposit::setLastOpDate(std::tm date)
 {
@@ -23,7 +23,7 @@ CurrencyType Deposit::calculateProfit(std::tm date) const
 	time_t lastOp = mktime(&dateLastOp);
 	if (cur == -1 || lastOp == -1 || cur < lastOp)
 	{
-		return CurrencyType();
+		return m_cached;
 	}
 
 	int diff = static_cast<int>(difftime(cur, lastOp) / 2592000);
@@ -32,21 +32,22 @@ CurrencyType Deposit::calculateProfit(std::tm date) const
 	{
 		temp += m_percent * temp / 100;
 	}
-	return temp - m_sum;
+	return m_cached + (temp - m_sum);
 }
 
 void Deposit::updateSum(double value, std::tm date)
 {
-	if (value > 0 && setLastOpDate(date))
-	{
-		m_sum += value;
-		m_sum += calculateProfit(date);
-	}
-	else if (std::abs(value) < m_sum && setLastOpDate(date))
-	{
-		m_sum += value;
-		m_sum += calculateProfit(date);
-	}
+	auto profit = calculateProfit(date);
+    if (value > 0 && setLastOpDate(date))
+    {
+        m_sum += value;
+        m_cached += profit;
+    }
+    else if (std::abs(value) < m_sum && setLastOpDate(date))
+    {
+        m_sum += value;
+        m_cached += profit;
+    }
 }
 
 UsualDeposit::UsualDeposit(unsigned long id, CurrencyType sum, std::tm date, double percent) : 

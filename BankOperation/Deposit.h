@@ -21,9 +21,11 @@ public:
 	virtual CurrencyType calculateProfit(std::tm date) const;
 	double getPercent() const { return m_percent; };
 	virtual void updateSum(double value, std::tm date);
+	CurrencyType getCached() const { return m_cached; };
 
 protected:
 	CurrencyType m_sum; //Сумма вклада
+	CurrencyType m_cached;
 	std::tm m_dateStart; //Дата открытия вклада
 	std::tm m_dateLastOp; //Дата последней операции с вкладом
 	double m_percent; //Процент начисления по вкладу
