@@ -210,3 +210,13 @@ void Bank::EditAccount()
 	}
 	std::cin.get();
 }
+
+void Bank::LoadFromFile(const std::string& fileName)
+{
+	m_data.LoadFromFile(fileName);
+}
+
+void Bank::SaveToFile(const std::string& fileName)
+{
+	m_data.SaveToFile(fileName);
+}

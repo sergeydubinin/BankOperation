@@ -10,32 +10,8 @@ int main(void)
 {
 	system("chcp 1251 && cls");
 	Bank t;
-	std::tm d1{}, d2{}, d3{}, cur{}, d4{};
-	std::istringstream ss("2010-2-1");
-	ss >> std::get_time(&d1, "%Y-%m-%d");
+	t.LoadFromFile("file.txt");
 
-	ss.clear();
-	ss.str("2010-3-1");
-	ss >> std::get_time(&d2, "%Y-%m-%d");
-
-	ss.clear();
-	ss.str("2011-3-1");
-	ss >> std::get_time(&d4, "%Y-%m-%d");
-
-	ss.clear();
-	ss.str("2010-4-1");
-	ss >> std::get_time(&d3, "%Y-%m-%d");
-
-	ss.clear();
-	ss.str("2010-4-25");
-	ss >> std::get_time(&cur, "%Y-%m-%d");
-
-	Deposit* a = new UsualDeposit(1, 2, d1, 3);
-	Deposit* b = new TermDeposit(2, 3, d2, 7, d4);
-	Deposit* c = new CurrencyDeposit(3, 4, d3);
-	t.Add(b);
-	t.Add(a);
-	t.Add(c);
 	do
 	{
 		std::cout << " 0. Открыть новый счет.\n";
@@ -82,6 +58,7 @@ int main(void)
 		default:
 		{
 			std::cin.get();
+			t.SaveToFile("file.txt");
 			return 0;
 		}
 		}
