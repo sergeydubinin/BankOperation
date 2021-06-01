@@ -153,6 +153,12 @@ public:
 		return m_cap;
 	}
 
+	~MySet(void)
+	{
+		free(std::is_pointer<T>{});
+		delete[] m_data;
+	}
+
 	void clear()
 	{
 		free(std::is_pointer<T>{});
